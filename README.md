@@ -1,6 +1,6 @@
-# Aplicación de Patrones GRASP en el Desarrollo de un Sistema de Gestión de Pedidos
+# Diseño y Desarrollo de un Sistema con Patrones GRASP
 
-El equipo de desarrollo de una empresa de e-commerce necesita mejorar la arquitectura de su sistema de gestión de pedidos. El objetivo es aplicar patrones GRASP para lograr un diseño más robusto y escalable. El sistema debe manejar la creación, modificación y cancelación de pedidos, así como la gestión de inventario y notificaciones a los clientes.
+El equipo de desarrollo de una fintech necesita un nuevo sistema para gestionar transacciones financieras. El sistema debe ser escalable, mantener una alta cohesión y bajo acoplamiento, y ser fácil de mantener y extender. Tu tarea es aplicar al menos dos patrones GRASP en el diseño y desarrollo de este sistema.
 
 ## Informacion General
 
@@ -9,7 +9,7 @@ El equipo de desarrollo de una empresa de e-commerce necesita mejorar la arquite
 | **Tema** | Aplicación de Patrones GRASP en el Desarrollo de Sistemas |
 | **Nivel** | advanced-l2 |
 | **Tipo** | practical |
-| **Tiempo estimado** | 4-6 horas |
+| **Tiempo estimado** | 3-4 horas |
 
 ## Fases del Reto
 
@@ -38,85 +38,60 @@ El equipo de desarrollo de una empresa de e-commerce necesita mejorar la arquite
 
 </details>
 
-### Fase 1: Análisis del Dominio y Selección de Patrones
+### Fase 1: Exploración y Definición de Requisitos
 
-**Objetivo:** Identificar las responsabilidades y relaciones entre los componentes del sistema y seleccionar los patrones GRASP a aplicar.
+**Objetivo:** Entender las necesidades del sistema y definir los requisitos funcionales y no funcionales.
 
 **Tiempo estimado:** 1 hora
 
 **Instrucciones:**
 
-- Analiza el dominio del sistema de gestión de pedidos.
-- Identifica las responsabilidades y relaciones entre los componentes del sistema.
-- Selecciona al menos dos patrones GRASP para aplicar en el diseño.
+- Identifica las principales funcionalidades que el sistema debe tener.
+- Define los requisitos no funcionales (por ejemplo, escalabilidad, seguridad, rendimiento).
 
-**Entregable:** Documento con el análisis del dominio y la selección de patrones GRASP.
+**Entregable:** Documento de requisitos funcionales y no funcionales.
 
 <details>
 <summary>Pistas de conocimiento</summary>
 
-- Considera la cohesión y el acoplamiento al seleccionar los patrones.
-- Piensa en cómo los patrones pueden mejorar la mantenibilidad y escalabilidad del sistema.
+- Piensa en cómo los patrones GRASP pueden ayudar a cumplir estos requisitos.
 
 </details>
 
-### Fase 2: Diseño del Sistema Aplicando Patrones GRASP
+### Fase 2: Diseño del Sistema con Patrones GRASP
 
-**Objetivo:** Diseñar el sistema aplicando los patrones GRASP seleccionados.
+**Objetivo:** Aplicar al menos dos patrones GRASP en el diseño del sistema.
 
 **Tiempo estimado:** 2 horas
 
 **Instrucciones:**
 
-- Aplica los patrones GRASP en el diseño del sistema.
-- Define las clases y sus responsabilidades.
-- Establece las relaciones entre las clases.
+- Elige al menos dos patrones GRASP y aplica cada uno en diferentes partes del sistema.
+- Explica cómo cada patrón contribuye a la cohesión y al bajo acoplamiento del sistema.
 
-**Entregable:** Diagrama de clases con los patrones GRASP aplicados.
-
-<details>
-<summary>Pistas de conocimiento</summary>
-
-- Asegúrate de que cada clase tenga una única responsabilidad.
-- Evalúa cómo los patrones mejoran la estructura del sistema.
-
-</details>
-
-### Fase 3: Implementación y Validación del Sistema
-
-**Objetivo:** Implementar el sistema y validar que los patrones GRASP han sido aplicados correctamente.
-
-**Tiempo estimado:** 2 horas
-
-**Instrucciones:**
-
-- Implementa el sistema siguiendo el diseño creado.
-- Realiza pruebas para validar que los patrones GRASP han sido aplicados correctamente.
-- Documenta cualquier desafío encontrado y cómo lo resolviste.
-
-**Entregable:** Código implementado y documentado con las pruebas realizadas.
+**Entregable:** Documento de diseño del sistema con la aplicación de patrones GRASP.
 
 <details>
 <summary>Pistas de conocimiento</summary>
 
-- Realiza pruebas unitarias para validar cada componente.
-- Documenta cualquier desafío y cómo lo resolviste.
+- Recuerda que cada patrón GRASP tiene un propósito específico.
+- Piensa en cómo cada patrón puede mejorar la estructura y la mantenibilidad del sistema.
 
 </details>
 
 ## Dimensiones Evaluadas
 
-- **queEs**: ¿Qué es el patrón Experto en Información y cómo lo aplicaste en tu diseño?
-- **paraQueSirve**: ¿Para qué sirve aplicar el patrón Creador en el sistema de gestión de pedidos?
-- **comoSeUsa**: ¿Cómo usaste el patrón Controlador para manejar las solicitudes en el sistema?
-- **erroresComunes**: ¿Qué errores comunes evitaste al aplicar los patrones GRASP en el diseño del sistema?
+- **queEs**: ¿Qué son los patrones GRASP y por qué son importantes en el diseño de sistemas?
+- **paraQueSirve**: ¿Cómo pueden los patrones GRASP ayudar a cumplir los requisitos del sistema?
+- **comoSeUsa**: ¿Cómo aplicaste los patrones GRASP en el diseño del sistema?
 - **queDecisionesImplica**: ¿Qué decisiones tomaste al aplicar los patrones GRASP y por qué?
 
 ## Criterios de Evaluacion
 
-- Análisis del dominio y selección de patrones GRASP documentados.
-- Diseño del sistema con patrones GRASP aplicados.
-- Implementación y validación del sistema con pruebas documentadas.
+- Definición clara de requisitos funcionales y no funcionales.
+- Aplicación correcta de al menos dos patrones GRASP en el diseño del sistema.
+- Explicación de cómo cada patrón contribuye a la cohesión y al bajo acoplamiento del sistema.
+- Decisiones justificadas al aplicar los patrones GRASP.
 
 ---
 

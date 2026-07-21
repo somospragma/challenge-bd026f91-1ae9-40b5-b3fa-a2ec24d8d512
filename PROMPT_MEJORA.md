@@ -123,176 +123,7 @@ El participante que recibirá este proyecto los debe encontrar y resolver él mi
 
 INPUT
 Aquí está la cadena con los archivos:
-// === ARCHIVO: package.json ===
-{
-  "name": "order-management-system",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "nest start",
-    "build": "nest build",
-    "test": "jest"
-  },
-  "dependencies": {
-    "@nestjs/common": "10.0.0",
-    "@nestjs/core": "10.0.0",
-    "@nestjs/platform-express": "10.0.0",
-    "typeorm": "0.3.9"
-  },
-  "devDependencies": {
-    "@types/node": "18.11.9",
-    "jest": "29.3.1"
-  }
-}
-
-// === ARCHIVO: src/domain/entities/order.ts ===
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
-@Entity()
-export class Order {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  productId: string;
-
-  @Column()
-  quantity: number;
-
-  @Column()
-  status: string;
-}
-
-// === ARCHIVO: src/application/usecases/createOrder.ts ===
-import { Injectable } from '@nestjs/common';
-import { OrderRepository } from '../../infrastructure/repositories/orderRepository';
-
-@Injectable()
-export class CreateOrderUseCase {
-  constructor(private readonly orderRepository: OrderRepository) {}
-
-  async execute(productId: string, quantity: number): Promise<void> {
-    const order = new Order();
-    order.productId = productId;
-    order.quantity = quantity;
-    order.status = 'pending';
-    await this.orderRepository.save(order);
-  }
-}
-
-// === ARCHIVO: src/application/usecases/modifyOrder.ts ===
-import { Injectable } from '@nestjs/common';
-import { OrderRepository } from '../../infrastructure/repositories/orderRepository';
-
-@Injectable()
-export class ModifyOrderUseCase {
-  constructor(private readonly orderRepository: OrderRepository) {}
-
-  async execute(id: number, quantity: number): Promise<void> {
-    const order = await this.orderRepository.findById(id);
-    if (!order) throw new Error('Order not found');
-    order.quantity = quantity;
-    await this.orderRepository.save(order);
-  }
-}
-
-// === ARCHIVO: src/application/usecases/cancelOrder.ts ===
-import { Injectable } from '@nestjs/common';
-import { OrderRepository } from '../../infrastructure/repositories/orderRepository';
-
-@Injectable()
-export class CancelOrderUseCase {
-  constructor(private readonly orderRepository: OrderRepository) {}
-
-  async execute(id: number): Promise<void> {
-    const order = await this.orderRepository.findById(id);
-    if (!order) throw new Error('Order not found');
-    order.status = 'cancelled';
-    await this.orderRepository.save(order);
-  }
-}
-
-// === ARCHIVO: src/infrastructure/repositories/orderRepository.ts ===
-import { Injectable } from '@nestjs/common';
-import { Order } from '../entities/order';
-
-@Injectable()
-export class OrderRepository {
-  private orders: Order[] = [];
-
-  async save(order: Order): Promise<void> {
-    this.orders.push(order);
-  }
-
-  async findById(id: number): Promise<Order | undefined> {
-    return this.orders.find(order => order.id === id);
-  }
-}
-
-// === ARCHIVO: src/infrastructure/controllers/orderController.ts ===
-import { Controller, Post, Body, Put, Param } from '@nestjs/common';
-import { CreateOrderUseCase } from '../usecases/createOrder';
-import { ModifyOrderUseCase } from '../usecases/modifyOrder';
-import { CancelOrderUseCase } from '../usecases/cancelOrder';
-
-@Controller('orders')
-export class OrderController {
-  constructor(
-    private readonly createOrderUseCase: CreateOrderUseCase,
-    private readonly modifyOrderUseCase: ModifyOrderUseCase,
-    private readonly cancelOrderUseCase: CancelOrderUseCase
-  ) {}
-
-  @Post()
-  async createOrder(@Body() body: { productId: string; quantity: number }): Promise<void> {
-    await this.createOrderUseCase.execute(body.productId, body.quantity);
-  }
-
-  @Put(':id')
-  async modifyOrder(@Param('id') id: number, @Body() body: { quantity: number }): Promise<void> {
-    await this.modifyOrderUseCase.execute(id, body.quantity);
-  }
-
-  @Put(':id/cancel')
-  async cancelOrder(@Param('id') id: number): Promise<void> {
-    await this.cancelOrderUseCase.execute(id);
-  }
-}
-
-// === ARCHIVO: test/unit/order.spec.ts ===
-import { Order } from '../../src/domain/entities/order';
-
-describe('Order Entity', () => {
-  it('should create an order', () => {
-    const order = new Order();
-    order.productId = '123';
-    order.quantity = 1;
-    order.status = 'pending';
-    expect(order).toBeDefined();
-  });
-});
-
-// === ARCHIVO: test/unit/createOrder.spec.ts ===
-import { CreateOrderUseCase } from '../../src/application/usecases/createOrder';
-import { OrderRepository } from '../../src/infrastructure/repositories/orderRepository';
-
-describe('CreateOrderUseCase', () => {
-  let createOrderUseCase: CreateOrderUseCase;
-  let orderRepository: OrderRepository;
-
-  beforeEach(() => {
-    orderRepository = new OrderRepository();
-    createOrderUseCase = new CreateOrderUseCase(orderRepository);
-  });
-
-  it('should create an order', async () => {
-    await createOrderUseCase.execute('123', 1);
-    const order = await orderRepository.findById(1);
-    expect(order).toBeDefined();
-    expect(order?.productId).toBe('123');
-  });
-});
-
-// === ARCHIVO: config/nestjs.config.ts ===
+// === ARCHIVO: src/main/main.ts ===
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
@@ -302,9 +133,113 @@ async function bootstrap() {
 }
 bootstrap();
 
-// === ARCHIVO: scripts/start.sh ===
-#!/bin/bash
-npm run build
-npm start
+// === ARCHIVO: src/domain/transaction.ts ===
+export class Transaction {
+  id: string;
+  amount: number;
+  date: Date;
+  status: string;
+
+  constructor(id: string, amount: number, date: Date, status: string) {
+    this.id = id;
+    this.amount = amount;
+    this.date = date;
+    this.status = status;
+  }
+}
+
+// === ARCHIVO: src/application/transaction.service.ts ===
+import { Injectable } from '@nestjs/common';
+import { Transaction } from '../domain/transaction';
+import { TransactionRepository } from '../infrastructure/transaction.repository';
+
+@Injectable()
+export class TransactionService {
+  constructor(private readonly transactionRepository: TransactionRepository) {}
+
+  async createTransaction(amount: number): Promise<Transaction> {
+    const transaction = new Transaction(Date.now().toString(), amount, new Date(), 'pending');
+    await this.transactionRepository.save(transaction);
+    return transaction;
+  }
+}
+
+// === ARCHIVO: src/infrastructure/transaction.repository.ts ===
+import { Injectable } from '@nestjs/common';
+import { Transaction } from '../domain/transaction';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+@Injectable()
+export class TransactionRepository {
+  constructor(
+    @InjectRepository(Transaction)
+    private readonly transactionRepository: Repository<Transaction>
+  ) {}
+
+  async save(transaction: Transaction): Promise<void> {
+    await this.transactionRepository.save(transaction);
+  }
+}
+
+// === ARCHIVO: src/main/app.module.ts ===
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Transaction } from '../domain/transaction';
+import { TransactionService } from '../application/transaction.service';
+import { TransactionRepository } from '../infrastructure/transaction.repository';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([Transaction])],
+  providers: [TransactionService, TransactionRepository],
+})
+export class AppModule {}
+
+// === ARCHIVO: docs/requisitos.md ===
+# Requisitos Funcionales y No Funcionales
+
+## Requisitos Funcionales
+- Gestión de transacciones financieras.
+- Creación de nuevas transacciones.
+- Consulta de transacciones existentes.
+
+## Requisitos No Funcionales
+- Escalabilidad.
+- Alta cohesión y bajo acoplamiento.
+- Facilidad de mantenimiento y extensión.
+
+// === ARCHIVO: docs/diseno-grasp.md ===
+# Diseño del Sistema con Patrones GRASP
+
+## Patrones Aplicados
+- **Creator**: Utilizado en el servicio de aplicación para crear nuevas transacciones.
+- **Information Expert**: Utilizado en el repositorio de infraestructura para persistir transacciones.
+
+## Contribución a la Cohesión y Bajo Acoplamiento
+- **Creator**: Centraliza la creación de transacciones en el servicio de aplicación, mejorando la cohesión.
+- **Information Expert**: Localiza la persistencia de transacciones en el repositorio de infraestructura, reduciendo el acoplamiento.
+
+// === ARCHIVO: package.json ===
+{
+  "name": "transaction-system",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "nest start",
+    "build": "nest build",
+    "test": "nest test",
+    "lint": "nest lint"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@nestjs/core": "^10.0.0",
+    "@nestjs/typeorm": "^10.0.0",
+    "typeorm": "^0.3.9"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^10.0.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}
 
 ```
